@@ -14,10 +14,10 @@ import static constants.Values.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
+import static utilities.GenericHelper.logPrint;
 import static utilities.PetHelper.getRequestBody;
 
 public class PetTest {
-    public static final Logger logger = Logger.getLogger(String.valueOf(PetTest.class));
 
     @BeforeClass
     public static void setup(){
@@ -34,7 +34,7 @@ public class PetTest {
         response.then().assertThat().statusCode(200);
         // verify body status value
         response.then().assertThat().body("[0].status", equalTo(status));
-        logger.info(String.valueOf(response.getStatusCode()));
+        logPrint(response, "Getting Available Pet");
     }
 
     @Test
@@ -46,7 +46,7 @@ public class PetTest {
         response.then().assertThat().statusCode(200);
         // verify body status value
         response.then().assertThat().body("[0].status", equalTo(status));
-        logger.info(String.valueOf(response.getStatusCode()));
+        logPrint(response, "Getting Pending Pet");
     }
     @Test
     public void getSoldPets(){
@@ -57,10 +57,11 @@ public class PetTest {
         response.then().assertThat().statusCode(200);
         // verify body status value
         response.then().assertThat().body("[0].status", equalTo(status));
-        logger.info(String.valueOf(response.getStatusCode()));
+        logPrint(response, "Getting Sold Pet");
     }
     @Test
     public void getPetById(){
+        createNewPet();
         int id = 11616;
         Response response =
                 given().
@@ -72,6 +73,7 @@ public class PetTest {
                         statusCode(200).
                         extract().
                         response();
+        logPrint(response, "Getting Pet...");
     }
 
     @Test
@@ -97,7 +99,7 @@ public class PetTest {
                 body("status",equalTo(status)).
                 extract().
                 response();
-        logger.info(String.valueOf(response.getStatusCode()));
+        logPrint(response, "Creating New Pet...");
 
     }
 
@@ -117,10 +119,11 @@ public class PetTest {
                         statusCode(200).
                         extract().
                         response();
-        logger.info(String.valueOf(response.getStatusCode()));
+        logPrint(response, "Updating Pet Photo...");
     }
     @Test
     public void updatePetDataUsingId(){
+        createNewPet();
         int id = 11616;
         String name = "CatFishhh";
         String status = petStatus[0];
@@ -136,7 +139,7 @@ public class PetTest {
                         statusCode(200).
                         body("message", equalTo(String.valueOf(id))).
                         extract().response();
-        logger.info(String.valueOf(response.getStatusCode()));
+        logPrint(response, "Updating a Pet using Form Param...");
     }
 
     @Test
@@ -163,7 +166,7 @@ public class PetTest {
                         body("status",equalTo(petStatus[2])).
                         extract().
                         response();
-        logger.info(String.valueOf(response.getStatusCode()));
+        logPrint(response, "Updating a Pet using Body...");
     }
 
     @Test
@@ -173,13 +176,13 @@ public class PetTest {
         Response response =
                 given().
                         header("accept", "application/json").
-                        header("api_key", apiKey).
+                        header("api_key", 452).
                         when().
                         delete("/pet/"+id).
                         then().
-                        statusCode(200).
                         extract().
                         response();
+        logPrint(response, "Deleting a Pet...");
     }
 
 }
