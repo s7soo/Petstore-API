@@ -1,6 +1,7 @@
 package utilities;
 
 import io.restassured.response.Response;
+import org.junit.Assert;
 import tests.PetTest;
 
 import java.util.logging.Logger;
@@ -11,11 +12,10 @@ public class GenericHelper {
 
     public static void logPrint(Response response, String msg){
         int status = response.getStatusCode();
-        String statusLine = response.getStatusLine();
         if (status == 200)
-            logger.info(String.valueOf(msg +"\nStatus Code: "+ status));
+            logger.info(msg +"\nStatus Code: "+ status);
         else
-            logger.info(String.valueOf(getStatusCodeMessage(status)));
+            logger.info(getStatusCodeMessage(status));
 
     }
     public static String getStatusCodeMessage(int statusCode) {
@@ -38,5 +38,9 @@ public class GenericHelper {
             case 503 -> "503 Service Unavailable: The server is temporarily unavailable.";
             default -> "Unknown Status Code: The status code provided is not recognized.";
         };
+    }
+
+    public static void verifyStatusCode(int expectedCode, int actualCode){
+        Assert.assertEquals(getStatusCodeMessage(actualCode),expectedCode, actualCode);
     }
 }

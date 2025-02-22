@@ -1,12 +1,10 @@
 package tests;
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 
 import static constants.Urls.baseUrl;
@@ -14,8 +12,9 @@ import static constants.Values.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
-import static utilities.GenericHelper.logPrint;
-import static utilities.PetHelper.getRequestBody;
+
+import static utilities.GenericHelper.*;
+import static utilities.PetHelper.*;
 
 public class PetTest {
 
@@ -57,6 +56,7 @@ public class PetTest {
         response.then().assertThat().statusCode(200);
         // verify body status value
         response.then().assertThat().body("[0].status", equalTo(status));
+
         logPrint(response, "Getting Sold Pet");
     }
     @Test
@@ -70,9 +70,9 @@ public class PetTest {
                         when().
                         get("/pet/"+id).
                         then().
-                        statusCode(200).
                         extract().
                         response();
+        verifyStatusCode(200, response.statusCode());
         logPrint(response, "Getting Pet...");
     }
 
@@ -85,7 +85,7 @@ public class PetTest {
         Response response =
         given().
                 header("Content-Type", "application/json").
-                body(getRequestBody(
+                body(getPetRequestBody(
                         id,
                         name,
                         photo,
@@ -94,13 +94,12 @@ public class PetTest {
                 when().
                 post("/pet").
                 then().
-                statusCode(200).
                 body("name",equalTo(name)).
                 body("status",equalTo(status)).
                 extract().
                 response();
+        verifyStatusCode(200, response.statusCode());
         logPrint(response, "Creating New Pet...");
-
     }
 
     @Test
@@ -116,9 +115,9 @@ public class PetTest {
                         when().
                         post("/pet/"+id+"/uploadImage").
                         then().
-                        statusCode(200).
                         extract().
                         response();
+        verifyStatusCode(200, response.statusCode());
         logPrint(response, "Updating Pet Photo...");
     }
     @Test
@@ -136,9 +135,10 @@ public class PetTest {
                         when().
                         post("/pet/"+id).
                         then().
-                        statusCode(200).
                         body("message", equalTo(String.valueOf(id))).
                         extract().response();
+
+        verifyStatusCode(200, response.statusCode());
         logPrint(response, "Updating a Pet using Form Param...");
     }
 
@@ -153,7 +153,7 @@ public class PetTest {
         Response response =
                 given().
                         header("content-type","application/json").
-                        body(getRequestBody(
+                        body(getPetRequestBody(
                                 id,
                                 name,
                                 photo,
@@ -162,10 +162,10 @@ public class PetTest {
                         when().
                         put("/pet").
                         then().
-                        statusCode(200).
                         body("status",equalTo(petStatus[2])).
                         extract().
                         response();
+        verifyStatusCode(200, response.statusCode());
         logPrint(response, "Updating a Pet using Body...");
     }
 
@@ -182,6 +182,7 @@ public class PetTest {
                         then().
                         extract().
                         response();
+        verifyStatusCode(200, response.statusCode());
         logPrint(response, "Deleting a Pet...");
     }
 

@@ -1,7 +1,7 @@
 package utilities;
 
 public class PetHelper {
-    public static String getRequestBody(int id, String name, String photo, String status){
+    public static String getPetRequestBody(int id, String name, String photo, String status){
         if (name.isEmpty())
             name = "name";
         if (photo.isEmpty())
@@ -27,4 +27,6 @@ public class PetHelper {
 
         return requestBody;
     }
+
+
 }
