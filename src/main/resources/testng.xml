@@ -1,0 +1,16 @@
+<suite name="Parallel Suite" parallel="classes" thread-count="3">
+
+<listeners>
+        <listener class-name="reports.ExtentReportListener"/>
+    </listeners>
+
+    <test name="SeleniumTests">
+        <classes>
+            <class name="tests.PetTest"/>
+            <class name="tests.StoreTest"/>
+            <class name="tests.UserTest"/>
+            <!-- Add more test classes here -->
+        </classes>
+    </test>
+</suite>
+

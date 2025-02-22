@@ -1,8 +1,8 @@
 package tests;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.testng.annotations.*;
+
 
 import java.io.File;
 
@@ -24,7 +24,7 @@ public class PetTest {
         RestAssured.baseURI = baseUrl;
     }
 
-    @Test
+    @Test (priority = 3)
     public void getAvailablePets(){
         String status = petStatus[0];
         // get request response
@@ -36,7 +36,7 @@ public class PetTest {
         logPrint(response, "Getting Available Pet");
     }
 
-    @Test
+    @Test (priority = 3)
     public void getPendingPets(){
         String status = petStatus[1];
         // get request response
@@ -47,7 +47,7 @@ public class PetTest {
         response.then().assertThat().body("[0].status", equalTo(status));
         logPrint(response, "Getting Pending Pet");
     }
-    @Test
+    @Test (priority = 3)
     public void getSoldPets(){
         String status = petStatus[2];
         // get request response
@@ -59,7 +59,7 @@ public class PetTest {
 
         logPrint(response, "Getting Sold Pet");
     }
-    @Test
+    @Test (priority = 3)
     public void getPetById(){
         createNewPet();
         int id = 11616;
@@ -76,7 +76,7 @@ public class PetTest {
         logPrint(response, "Getting Pet...");
     }
 
-    @Test
+    @Test (priority = 1)
     public void createNewPet(){
         int id = 11616;
         String name = "CatFish";
@@ -102,7 +102,7 @@ public class PetTest {
         logPrint(response, "Creating New Pet...");
     }
 
-    @Test
+    @Test (priority = 2)
     public void updatePetPhoto(){
         createNewPet();
         int id = 11616;
@@ -120,7 +120,7 @@ public class PetTest {
         verifyStatusCode(200, response.statusCode());
         logPrint(response, "Updating Pet Photo...");
     }
-    @Test
+    @Test (priority = 2)
     public void updatePetDataUsingId(){
         createNewPet();
         int id = 11616;
@@ -142,7 +142,7 @@ public class PetTest {
         logPrint(response, "Updating a Pet using Form Param...");
     }
 
-    @Test
+    @Test (priority = 2)
     public void updatePet(){
         createNewPet();
         int id = 11616;
@@ -169,7 +169,7 @@ public class PetTest {
         logPrint(response, "Updating a Pet using Body...");
     }
 
-    @Test
+    @Test (priority = 4)
     public void deletePet(){
         int id = 11616;
 
@@ -184,6 +184,11 @@ public class PetTest {
                         response();
         verifyStatusCode(200, response.statusCode());
         logPrint(response, "Deleting a Pet...");
+    }
+    @AfterClass
+    public static void tearDown(){
+        // assign base url
+        RestAssured.delete();
     }
 
 }

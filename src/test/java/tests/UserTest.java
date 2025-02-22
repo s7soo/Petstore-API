@@ -2,8 +2,7 @@ package tests;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.testng.annotations.*;
 
 import static constants.Urls.baseUrl;
 import static io.restassured.RestAssured.given;
@@ -20,7 +19,7 @@ public class UserTest {
         RestAssured.baseURI = baseUrl;
     }
 
-    @Test
+    @Test (priority = 1)
     public void createNewListOfUsers(){
         Response response =
                 given()
@@ -48,7 +47,7 @@ public class UserTest {
         response.body().prettyPrint();
         verifyStatusCode(200, response.statusCode());
     }
-    @Test
+    @Test (priority = 1)
     public void createNewUser(){
         Response response =
                 given()
@@ -68,7 +67,7 @@ public class UserTest {
         verifyStatusCode(200, response.statusCode());
     }
 
-    @Test
+    @Test (priority = 3)
     public void getUserByUsername(){
         String username = "mohuss";
         Response response =
@@ -84,7 +83,7 @@ public class UserTest {
         verifyStatusCode(200, response.statusCode());
     }
 
-    @Test
+    @Test (priority = 2)
     public void updateUserByUsername(){
         String username = "mohuss";
         Response response =
@@ -106,7 +105,7 @@ public class UserTest {
         verifyStatusCode(200, response.statusCode());
     }
 
-    @Test
+    @Test (priority = 4)
     public void deleteUserByUsername(){
         String username = "mohuss";
         Response response =
@@ -123,7 +122,7 @@ public class UserTest {
     }
 
 
-    @Test
+    @Test (priority = 2)
     public void userLogin(){
         String username = "mohuss";
         String password = "13355";
@@ -141,7 +140,7 @@ public class UserTest {
         verifyStatusCode(200, response.statusCode());
     }
 
-    @Test
+    @Test (priority = 4)
     public void userLogout(){
 
         Response response =
@@ -154,5 +153,10 @@ public class UserTest {
         logPrint(response, "user logout... ");
         response.body().prettyPrint();
         verifyStatusCode(200, response.statusCode());
+    }
+    @AfterClass
+    public static void tearDown(){
+        // assign base url
+        RestAssured.delete();
     }
 }

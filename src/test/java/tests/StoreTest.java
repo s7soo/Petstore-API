@@ -3,8 +3,7 @@ package tests;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.logging.log4j.core.net.Priority;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.testng.annotations.*;
 
 import static constants.Urls.baseUrl;
 import static constants.Values.logger;
@@ -21,7 +20,7 @@ public class StoreTest {
         // assign base url
         RestAssured.baseURI = baseUrl;
     }
-    @Test
+    @Test (priority = 3)
     public void showStoreInventory(){
         Response response =
                 given()
@@ -36,7 +35,7 @@ public class StoreTest {
     }
 
 
-    @Test
+    @Test (priority = 1)
     public void createNewOrder(){
         Response response =
                 given()
@@ -54,7 +53,7 @@ public class StoreTest {
         globalOrderId = response.path("id");
     }
 
-    @Test
+    @Test (priority = 3)
     public void showOrderById(){
         int orderId = globalOrderId;
         Response response =
@@ -68,7 +67,7 @@ public class StoreTest {
         logPrint(response, "Getting order by Id...");
         response.body().prettyPrint();
     }
-    @Test
+    @Test (priority = 4)
     public void deleteOrderById(){
         int orderId = globalOrderId;
         Response response =
@@ -81,5 +80,10 @@ public class StoreTest {
         verifyStatusCode(200, response.statusCode());
         logPrint(response, "deleting order by Id...");
         response.body().prettyPrint();
+    }
+    @AfterClass
+    public static void tearDown(){
+        // assign base url
+        RestAssured.delete();
     }
 }
